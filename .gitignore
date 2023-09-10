@@ -1,2 +1,6 @@
 venv/
 Readme.org
+previous/
+__pycache__/
+*.pyc
+*.med
