@@ -803,6 +803,7 @@ def import_data(name, ivars, pysettings):
     data_dict = bib.import_data(name, ivars, pysettings)
     pydeg_data = data_dict["pydeg_df"]
     miRNA_data = data_dict["miRNA_df"]
+
     return pydeg_data.to_dict('records'), miRNA_data.to_dict('records')
 
 
@@ -1026,7 +1027,6 @@ def dropdown_pytable(pydeg_data, pysettings):
 def update_dropdown_options(pydeg_data, class_1,
                             class_2, feat, plot, mirna):
     pydeg_df = pd.DataFrame.from_records(pydeg_data)
-
     if class_1:
         pydeg_df = pydeg_df[pydeg_df.category_1 == class_1]
     if class_2:

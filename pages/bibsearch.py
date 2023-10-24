@@ -134,9 +134,10 @@ def import_vars(base):
     return ivars
 
 
-def import_data(base, ivars, py_settings):
+def import_data(base, ivars, py_settings_str):
     base = ivars['ibase']
-
+    py_settings=int(py_settings_str)
+    
     # Import miRNA alignment dataframe
     miRNA_df = pd.read_csv(
         f"./data/miRNA_alignment_global_mirmap_{base}.tsv",
@@ -144,7 +145,7 @@ def import_data(base, ivars, py_settings):
         low_memory=False,
     )
     miRNA_df = miRNA_df.loc[(miRNA_df['pydeg_settings'].eq(py_settings))]
-    miRNA_df['id'] = miRNA_df.index
+    miRNA_df['id'] = range(0, len(miRNA_df))
     miRNA_df.loc[:, 'Score_y'] = miRNA_df['Score_y'].\
         round(2)
     miRNA_df.loc[:, 'Comparison'] = miRNA_df['Comparison'].\
@@ -156,7 +157,7 @@ def import_data(base, ivars, py_settings):
         sep='\t', low_memory=False
     )
     pydeg_main = pydeg_main.loc[(pydeg_main['pydeg_settings'].eq(py_settings))]
-    pydeg_main['id'] = pydeg_main.index
+    pydeg_main['id'] = range(0, len(pydeg_main))
     pydeg_df = pydeg_main[selected_cols]
     pydeg_df.loc[:, 'ratioPTx'] = pydeg_df['ratioPTx'].round(2)
     pydeg_df.loc[:, 'comparison'] = pydeg_df['comparison'].\
@@ -221,7 +222,7 @@ def draw_miRNAplot(mirmap_link, globalAln_link):
     return miRNA_alignment_plot
 
 
-def get_description(group, category=None):
+def get_description(group, category=None, html=True):
     if category:
         text_description = pydeg_group_description[
             (pydeg_group_description["group"] == group)
@@ -231,9 +232,12 @@ def get_description(group, category=None):
         text_description = pydeg_group_description[
             pydeg_group_description["group"] == group
         ]["description"]
-    description = dash_dangerously_set_inner_html.DangerouslySetInnerHTML(
-        text_description
-    )
+    if html:
+        description = dash_dangerously_set_inner_html.DangerouslySetInnerHTML(
+            text_description
+        )
+    else:
+        description = text_description
     return description
 
 
