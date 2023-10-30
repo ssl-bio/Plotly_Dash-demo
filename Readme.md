@@ -40,6 +40,11 @@ python app.py
 ```
 
 
+# Live version
+
+<https://sslbio.pythonanywhere.com/>
+
+
 # Further details
 
 Details and code for the analysis of degradation fragments are provided on another [repository](https://github.com/ssl-bio/Degradome-analysis)

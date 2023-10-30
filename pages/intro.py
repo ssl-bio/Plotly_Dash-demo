@@ -9,16 +9,16 @@ from . import bibsearch as bib
 dash.register_page(__name__, path='/', name='Description')
 
 # Class definition for headers
-icon_hide = "fas fa-angle-up me-4 align-self-center icon"
-icon_show = "fas fa-angle-down me-4 align-self-center icon"
-hdr_hide = 'd-flex bg-opacity-25 bg-primary'
-hdr_show = 'd-flex bg-opacity-10 bg-primary'
-hdr_div = 'd-flex bg-opacity-25 bg-primary'
+# icon_hide = "fas fa-angle-up me-4 align-self-center icon"
+# icon_show = "fas fa-angle-down me-4 align-self-center icon"
+# hdr_hide = 'd-flex bg-opacity-25 bg-primary'
+# hdr_show = 'd-flex bg-opacity-10 bg-primary'
+# hdr_div = 'd-flex bg-opacity-25 bg-primary'
 layout = html.Main([
     # Summary
     html.Section([
         dbc.Alert([html.H2('Summary',
-                           className='border-bottom border-3 border-secondary pb-2 mb-4'),
+                           className=bib.summary_cls),
 
                    DangerouslySetInnerHTML('''
 <p>
@@ -32,11 +32,11 @@ This Dash app summarizes the analysis of mRNA degradation fragments using a thir
             html.Div([
                 html.H2('PyDegradome description',
                         className='flex-fill'),
-                html.I(className=icon_hide,
+                html.I(className=bib.icon_hide,
                        id="pydeg_btn",
                        n_clicks=0)
             ], id="pydeg_header",
-                     className=hdr_div),
+                     className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
                 id="pydeg_description_html",
@@ -83,11 +83,11 @@ Significant peaks are reported in a text file (see below); genomic coordinates f
             html.Div([
                 html.H2('Classification post PyDegradome',
                         className='flex-fill'),
-                html.I(className=icon_hide,
+                html.I(className=bib.icon_hide,
                        id="classification_btn",
                        n_clicks=0)
             ], id="classification_header",
-                     className=hdr_div),
+                     className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
                 id="classification_description_html",
@@ -168,11 +168,11 @@ The two classification steps along with the annotation, summary and other steps 
             html.Div([
                 html.H2('Alignment of sequences around peaks with known miRNA',
                         className='flex-fill'),
-                html.I(className=icon_hide,
+                html.I(className=bib.icon_hide,
                        id="alignment_btn",
                        n_clicks=0)
             ], id="alignment_header",
-                     className=hdr_div),
+                     className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
                 id="alignment_description_html",
@@ -198,11 +198,11 @@ Note that due to storage limitation the alignment was conducted on sequences fro
             html.Div([
                 html.H2('Search for related literature',
                         className='flex-fill'),
-                html.I(className=icon_hide,
+                html.I(className=bib.icon_hide,
                        id="search_btn",
                        n_clicks=0)
             ], id="search_header",
-                     className=hdr_div),
+                     className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
                 id="search_description_html",
@@ -230,11 +230,11 @@ The search is carried using <code>biopython</code>'s <a href="https://biopython.
             html.Div([
                 html.H2('References',
                         className='flex-fill'),
-                html.I(className=icon_hide,
+                html.I(className=bib.icon_hide,
                        id="references_btn",
                        n_clicks=0)
             ], id="references_header",
-                     className=hdr_div),
+                     className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
                 id="references_description_html",
@@ -263,17 +263,10 @@ The search is carried using <code>biopython</code>'s <a href="https://biopython.
     prevent_initial_call=True
 )
 def toggle_collapse_description(n, is_open):
-    if n:
-        hide_show = not is_open
-        if hide_show:
-            btn = icon_hide
-            hdr = hdr_hide
-        else:
-            btn = icon_show
-            hdr = hdr_show
-    else:
-        hide_show = is_open
-        btn = icon_hide
+    toggle_section = bib.toggle_show(n, is_open)
+    hide_show = toggle_section[0]
+    btn = toggle_section[1]
+    hdr = toggle_section[2]
 
     return hide_show, btn, hdr
 
@@ -287,17 +280,10 @@ def toggle_collapse_description(n, is_open):
     prevent_initial_call=True
 )
 def toggle_collapse_alignment(n, is_open):
-    if n:
-        hide_show = not is_open
-        if hide_show:
-            btn = icon_hide
-            hdr = hdr_hide
-        else:
-            btn = icon_show
-            hdr = hdr_show
-    else:
-        hide_show = is_open
-        btn = icon_hide
+    toggle_section = bib.toggle_show(n, is_open)
+    hide_show = toggle_section[0]
+    btn = toggle_section[1]
+    hdr = toggle_section[2]
 
     return hide_show, btn, hdr
 
@@ -311,17 +297,10 @@ def toggle_collapse_alignment(n, is_open):
     prevent_initial_call=True
 )
 def toggle_collapse_classification(n, is_open):
-    if n:
-        hide_show = not is_open
-        if hide_show:
-            btn = icon_hide
-            hdr = hdr_hide
-        else:
-            btn = icon_show
-            hdr = hdr_show
-    else:
-        hide_show = is_open
-        btn = icon_hide
+    toggle_section = bib.toggle_show(n, is_open)
+    hide_show = toggle_section[0]
+    btn = toggle_section[1]
+    hdr = toggle_section[2]
 
     return hide_show, btn, hdr
 
@@ -335,17 +314,10 @@ def toggle_collapse_classification(n, is_open):
     prevent_initial_call=True
 )
 def toggle_collapse_search(n, is_open):
-    if n:
-        hide_show = not is_open
-        if hide_show:
-            btn = icon_hide
-            hdr = hdr_hide
-        else:
-            btn = icon_show
-            hdr = hdr_show
-    else:
-        hide_show = is_open
-        btn = icon_hide
+    toggle_section = bib.toggle_show(n, is_open)
+    hide_show = toggle_section[0]
+    btn = toggle_section[1]
+    hdr = toggle_section[2]
 
     return hide_show, btn, hdr
 
@@ -359,16 +331,9 @@ def toggle_collapse_search(n, is_open):
     prevent_initial_call=True
 )
 def toggle_collapse_references(n, is_open):
-    if n:
-        hide_show = not is_open
-        if hide_show:
-            btn = icon_hide
-            hdr = hdr_hide
-        else:
-            btn = icon_show
-            hdr = hdr_show
-    else:
-        hide_show = is_open
-        btn = icon_hide
+    toggle_section = bib.toggle_show(n, is_open)
+    hide_show = toggle_section[0]
+    btn = toggle_section[1]
+    hdr = toggle_section[2]
 
     return hide_show, btn, hdr

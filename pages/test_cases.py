@@ -9,28 +9,30 @@ import dash_dangerously_set_inner_html
 import dash_breakpoints
 import plotly.express as px
 import pandas as pd
-# import numpy as np
-# import json
 from . import bibsearch as bib
 
 dash.register_page(__name__, name='Test cases')
 
 # Define active cell in peak data frame.
 initial_active_cell = {'row': 0, 'column': 3, 'row_id': 0}
-# initial_active_cell_miRNA = {'row': 0, 'column': 0}
 initial_active_cell_bib = {'row': 0, 'column': 1}
 
-# header
-# row0 = initial_active_cell['row_id']
-# row_default = 0
+tab_style = {
+    # 'borderBottom': '1px solid var(--bs-secondary)',
+    'backgroundColor': 'var(--bs-secondary)',
+    'fontWeight': '500',
+    'padding': '1em 0',
+    'overflowWrap': 'break-word'
+}
 
-
-# Class definition for headers
-icon_show = "fas fa-angle-down me-4 align-self-center icon"
-icon_hide = "fas fa-angle-up me-4 align-self-center icon"
-hdr_hide = 'd-flex bg-opacity-25 bg-primary'
-hdr_show = 'd-flex bg-opacity-10 bg-primary'
-hdr_div = 'd-flex bg-opacity-25 bg-primary'
+tab_selected_style = {
+    'borderTop': '2px solid var(--bs-dark)',
+    # 'color': 'var(--bs-light)',
+    'backgroundColor': 'var(--bs-primary)',
+    'fontWeight': '700',
+    'padding': '1em 0',
+    'overflowWrap': 'break-word'
+}
 
 notes_btn = html.Div([
     html.I(className="fas fa-pencil-square text-primary fs-2 opacity-50",
@@ -55,6 +57,7 @@ notes_btn = html.Div([
           'bottom': 0,
           'right': '3vw',
           'marginBottom': '30vh',
+          'zIndex': '1'
           })
 
 dataSet_cards = dbc.CardGroup([
@@ -68,13 +71,13 @@ dataSet_cards = dbc.CardGroup([
             dbc.Button("Selected",
                        id="zhang_btn",
                        n_clicks=0,
-                       color="info",
-                       outline=True),
+                       color="secondary",
+                       ),
         ]),
         id="zhang_card",
         color="primary",
         outline=True,
-        className="bg-primary bg-opacity-75"),
+        className=bib.dataSetOn),
     dbc.Card(
         dbc.CardBody([
             html.H5("The miRNome function transitions from regulating developmental genes to transposable elements during pollen maturation", className="mb-3"),
@@ -85,13 +88,12 @@ dataSet_cards = dbc.CardGroup([
             dbc.Button("Select",
                        id="oliver_btn",
                        n_clicks=0,
-                       outline=True,
                        color="primary"),
         ]),
         id="oliver_card",
         color="secondary",
         outline=True,
-        className="bg-secondary bg-opacity-10 text-secondary"),
+        className=bib.dataSetOff),
 ])
 
 layout = html.Main([
@@ -106,7 +108,7 @@ layout = html.Main([
     html.Section([
         dbc.Alert([
             html.H2('Datasets',
-                    className='border-bottom border-3 border-secondary pb-2 mb-4'),
+                    className=bib.summary_cls),
             dataSet_cards
         ], color='primary'),
         dcc.Store(
@@ -128,11 +130,11 @@ layout = html.Main([
             html.Div([
                 html.H2('Test case description',
                         className='flex-fill'),
-                html.I(className=icon_hide,
+                html.I(className=bib.icon_hide,
                        id="description_btn",
                        n_clicks=0)
             ], id="description_header",
-                     className=hdr_div),
+                     className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
                 id="description_html",
@@ -146,11 +148,11 @@ layout = html.Main([
             html.Div([
                 html.H2('PyDegradome settings',
                         className='flex-fill'),
-                html.I(className=icon_hide,
+                html.I(className=bib.icon_hide,
                        id="settings_btn",
                        n_clicks=0)
             ], id="settings_header",
-                     className=hdr_div),
+                     className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
                 id="settings_description_html",
@@ -182,11 +184,11 @@ layout = html.Main([
             html.Div([
                 html.H2('Summary of peak classification',
                         className='flex-fill'),
-                html.I(className=icon_hide,
+                html.I(className=bib.icon_hide,
                        id="summary_btn",
                        n_clicks=0)
             ], id="summary_header",
-                     className=hdr_div),
+                     className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
                 id="summary_description_html",
@@ -264,11 +266,11 @@ layout = html.Main([
             html.Div([
                 html.H3('List of candidates',
                         className='flex-fill'),
-                html.I(className=icon_hide,
+                html.I(className=bib.icon_hide,
                        id="candidates_btn",
                        n_clicks=0)
             ], id="candidates_header",
-                     className=hdr_div),
+                     className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
                 id="candidates_description_html",
@@ -282,6 +284,7 @@ layout = html.Main([
                     html.Div([
                         html.Div([
                             html.Div(id="dropdown_pytable",
+                                     className="mb-2",
                                      children=bib.pytable_dropdown_default),
                             html.Div([
                                 dash_table.DataTable(
@@ -324,7 +327,13 @@ layout = html.Main([
                                     style_cell={
                                         'font-size': '0.575rem',
                                         'font-family': 'sans-serif',
-                                        'padding': '0.5em 0.5em'
+                                        'padding': '0.5em 0.5em',
+                                        'backgroundColor': 'var(--bs-light)',
+                                        'color': 'var(--bs-dark)'
+                                    },
+                                    style_header={
+                                        'backgroundColor': 'var(--bs-primary)',
+                                        'fontWeight': '700'
                                     },
                                     style_data_conditional=([
                                         {'if': {
@@ -332,7 +341,7 @@ layout = html.Main([
                                             '{plot_link} = Yes',
                                             'column_id': 'tx_name'
                                         },
-                                         'backgroundColor': 'var(--bs-light)',
+                                         'backgroundColor': 'var(--bs-secondary)',
                                          'fontWeight': 'bold'},
                                         {'if': {
                                             'filter_query':
@@ -358,15 +367,21 @@ layout = html.Main([
                                     dcc.Tab(
                                         label='Decay Plot [Gene level]',
                                         value='gene_plot',
-                                        className="dropdownFont text-wrap"),
+                                        style=tab_style,
+                                        selected_style=tab_selected_style,
+                                        className="dropdownFont"),
                                     dcc.Tab(
                                         label='Decay Plot [Peak level]',
                                         value='peak_plot',
-                                        className="dropdownFont text-wrap"),
+                                        style=tab_style,
+                                        selected_style=tab_selected_style,
+                                        className="dropdownFont"),
                                     dcc.Tab(
                                         label='miRNA alignment',
                                         value='miRNA_tab',
-                                        className="dropdownFont text-wrap",
+                                        style=tab_style,
+                                        selected_style=tab_selected_style,
+                                        className="dropdownFont",
                                         children=[
                                             dash_table.DataTable(
                                                 id='miRNA_datatable',
@@ -391,11 +406,11 @@ layout = html.Main([
             html.Div([
                 html.H2('Related literature for the selected transcripts',
                         className='flex-fill'),
-                html.I(className=icon_hide,
+                html.I(className=bib.icon_hide,
                        id="search_refs_btn",
                        n_clicks=0)
             ], id="search_refs_header",
-                     className=hdr_div),
+                     className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
                 id="search_refs_description_html",
@@ -417,8 +432,7 @@ layout = html.Main([
                                 required=True,
                                 style={"fontSize": "0.750rem"}
                             ),
-                        ],
-                                width=4
+                        ], width=4
                                 ),
                         dbc.Col([
                             dbc.Label("Search term",
@@ -434,8 +448,7 @@ layout = html.Main([
                                 required=False,
                                 style={"fontSize": "0.750rem"}
                             ),
-                        ],
-                                width=3
+                        ], width=3
                                 ),
                         dbc.Col([
                             dbc.Label("Results",
@@ -450,8 +463,7 @@ layout = html.Main([
                                 debounce=True,
                                 style={"fontSize": "0.750rem"}
                             )
-                        ],
-                                width=2
+                        ], width=2
                                 ),
                         dbc.Col([
                             dbc.Button(
@@ -468,12 +480,31 @@ layout = html.Main([
                                 ),
                         dbc.Col(html.Div(id="animate_search"),
                                 className="d-flex align-self-end")
-                    ], className="d-flex g-3"),
+                    ], className="d-flex"),
 
                     # Biblio output
                     html.Div(
                         id='biblio_search_output',
                         children=[
+                            dbc.Col([
+                                dbc.Button(
+                                    "Search log",
+                                    id="btn_biblio_log",
+                                    outline=True,
+                                    className="w-auto description_h4 mb-3",
+                                    color="secondary",
+                                    size="sm",
+                                    n_clicks=0,
+                                ),
+                                dbc.Collapse(
+                                    dbc.Card(
+                                        dbc.CardBody(id='biblio_log'),
+                                        className='mb-3'
+                                    ),
+                                    id="biblio_card",
+                                    is_open=False,
+                                )
+                            ], className="mt-3"),
                             html.Table(
                                 id='biblio_table',
                                 children=[
@@ -519,39 +550,18 @@ layout = html.Main([
                                         selected_rows=[],
                                                 )  # Datatable
                                 ], className="mt-3"),  # Table
-                            dbc.Button(
-                                "Search log",
-                                id="btn_biblio_log",
-                                outline=True,
-                                className="w-auto description_h4 mb-3",
-                                color="primary",
-                                size="sm",
-                                n_clicks=0,
-                            ),
-                            dbc.Collapse(
-                                dbc.Card(
-                                    dbc.CardBody(id='biblio_log'),
-                                    className='mb-3'
+                            dbc.Col([
+                                dbc.Button(
+                                    id='btn_save_biblio',
+                                    outline=True,
+                                    color="primary",
+                                    children="Download bibliography",
+                                    className="description_h4",
+                                    size="sm"
                                 ),
-                                id="biblio_card",
-                                is_open=False,
-                            ),
-                            dbc.Row([
-                                dbc.Col([
-                                    dbc.Button(
-                                        id='btn_save_biblio',
-                                        outline=True,
-                                        color="secondary",
-                                        children="Download bibliography",
-                                        className="description_h4",
-                                        size="sm"
-                                    )
-                                ]),
-                                dbc.Col([
-                                    dcc.Download(
-                                        id="download_biblio"
-                                    )
-                                ]),
+                                dcc.Download(
+                                    id="download_biblio"
+                                )
                             ])
                         ], style={'display': 'none'}),
                     dcc.Store(
@@ -584,11 +594,11 @@ layout = html.Main([
             html.Div([
                 html.H2('References',
                         className='flex-fill'),
-                html.I(className=icon_hide,
+                html.I(className=bib.icon_hide,
                        id="references_btn",
                        n_clicks=0)
             ], id="references_header",
-                     className=hdr_div),
+                     className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
                 id="references_description_html",
@@ -627,17 +637,10 @@ clientside_callback(
     prevent_initial_call=True
 )
 def toggle_collapse_description(n, is_open):
-    if n:
-        hide_show = not is_open
-        if hide_show:
-            btn = icon_hide
-            hdr = hdr_hide
-        else:
-            btn = icon_show
-            hdr = hdr_show
-    else:
-        hide_show = is_open
-        btn = icon_hide
+    toggle_section = bib.toggle_show(n, is_open)
+    hide_show = toggle_section[0]
+    btn = toggle_section[1]
+    hdr = toggle_section[2]
 
     return hide_show, btn, hdr
 
@@ -651,17 +654,10 @@ def toggle_collapse_description(n, is_open):
     prevent_initial_call=True
 )
 def toggle_collapse_settings(n, is_open):
-    if n:
-        hide_show = not is_open
-        if hide_show:
-            btn = icon_hide
-            hdr = hdr_hide
-        else:
-            btn = icon_show
-            hdr = hdr_show
-    else:
-        hide_show = is_open
-        btn = icon_hide
+    toggle_section = bib.toggle_show(n, is_open)
+    hide_show = toggle_section[0]
+    btn = toggle_section[1]
+    hdr = toggle_section[2]
 
     return hide_show, btn, hdr
 
@@ -675,17 +671,10 @@ def toggle_collapse_settings(n, is_open):
     prevent_initial_call=True
 )
 def toggle_collapse_summary(n, is_open):
-    if n:
-        hide_show = not is_open
-        if hide_show:
-            btn = icon_hide
-            hdr = hdr_hide
-        else:
-            btn = icon_show
-            hdr = hdr_show
-    else:
-        hide_show = is_open
-        btn = icon_hide
+    toggle_section = bib.toggle_show(n, is_open)
+    hide_show = toggle_section[0]
+    btn = toggle_section[1]
+    hdr = toggle_section[2]
 
     return hide_show, btn, hdr
 
@@ -699,17 +688,10 @@ def toggle_collapse_summary(n, is_open):
     prevent_initial_call=True
 )
 def toggle_collapse_candidates(n, is_open):
-    if n:
-        hide_show = not is_open
-        if hide_show:
-            btn = icon_hide
-            hdr = hdr_hide
-        else:
-            btn = icon_show
-            hdr = hdr_show
-    else:
-        hide_show = is_open
-        btn = icon_hide
+    toggle_section = bib.toggle_show(n, is_open)
+    hide_show = toggle_section[0]
+    btn = toggle_section[1]
+    hdr = toggle_section[2]
 
     return hide_show, btn, hdr
 
@@ -723,17 +705,10 @@ def toggle_collapse_candidates(n, is_open):
     prevent_initial_call=True
 )
 def toggle_collapse_references(n, is_open):
-    if n:
-        hide_show = not is_open
-        if hide_show:
-            btn = icon_hide
-            hdr = hdr_hide
-        else:
-            btn = icon_show
-            hdr = hdr_show
-    else:
-        hide_show = is_open
-        btn = icon_hide
+    toggle_section = bib.toggle_show(n, is_open)
+    hide_show = toggle_section[0]
+    btn = toggle_section[1]
+    hdr = toggle_section[2]
 
     return hide_show, btn, hdr
 # END callback for header display
@@ -760,21 +735,21 @@ def toggle_dataset(o_clicks, z_clicks, o_state, z_state):
         if o_state == "Select":
             btn_state_on = 'Select'
             btn_color_on = 'primary'
-            card_class_on = "bg-secondary bg-opacity-10 text-secondary"
+            card_class_on = bib.dataSetOff
             card_color_on = "secondary"
             btn_state_off = 'Selected'
-            btn_color_off = 'info'
-            card_class_off = "bg-primary bg-opacity-75"
+            btn_color_off = 'secondary'
+            card_class_off = bib.dataSetOn
             card_color_off = "primary"
             data_set = 'Oliver-2022'
         elif z_state == "Select":
             btn_state_off = 'Select'
             btn_color_off = 'primary'
-            card_class_off = "bg-secondary bg-opacity-10 text-secondary"
+            card_class_off = bib.dataSetOff
             card_color_off = "secondary"
             btn_state_on = 'Selected'
             btn_color_on = 'secondary'
-            card_class_on = "bg-primary bg-opacity-75"
+            card_class_on = bib.dataSetOn
             card_color_on = "primary"
             data_set = 'Zhang-2021'
 
@@ -1142,18 +1117,18 @@ from comparison {comparison}'
                     ],
                     data=dff.to_dict("records"),
                     merge_duplicate_headers=True,
-                    style_cell_conditional=[
-                        {"if": {"column_id": "Transcript"}, "width": "20%"},
-                        {"if": {"column_id": "miRNA"}, "width": "20%"},
-                        {"if": {"column_id": "Score_x"}, "width": "9%"},
-                        {"if": {"column_id": "Score_y"}, "width": "15%"},
-                        {"if": {"column_id": "Comparison"}, "width": "30%"},
-                    ],
-                    style_cell={"fontSize": "0.625rem",
-                                'font-family': 'sans-serif',
-                                'padding': '0.5em 0.7em'},
+                    style_cell={
+                        'font-size': '0.575rem',
+                        'font-family': 'sans-serif',
+                        'padding': '0.5em 0.5em',
+                        'backgroundColor': 'var(--bs-light)',
+                        'color': 'var(--bs-dark)'
+                    },
+                    style_header={
+                        'backgroundColor': 'var(--bs-primary)',
+                        'fontWeight': '700'
+                    },
                     active_cell={'row': 0, 'column': 0, 'row_id': row_id},
-                    # selected_cells=[],
                     page_size=3
                 ),
                 html.Div(id='miRNA_plot')

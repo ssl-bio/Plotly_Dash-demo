@@ -7,9 +7,13 @@ doc_title = 'Dashboard for the analysis of mRNA degradation fragments'
 
 e_stylesheets = [dbc.themes.JOURNAL, dbc.icons.FONT_AWESOME]
 theme_change = ThemeChangerAIO(aio_id="theme",
-                               radio_props={"className": "description_h4",
-                                            'value': dbc.themes.JOURNAL},
-                               button_props={"className": "rounded-pill me-4"})
+                               radio_props={
+                                   "className":
+                                   "description_h4",
+                                   'value': dbc.themes.JOURNAL},
+                               button_props={
+                                   "className":
+                                   "rounded-pill me-4 description_h3"})
 
 app = dash.Dash(__name__, use_pages=True,
                 assets_ignore='.#custom.css',
@@ -34,7 +38,7 @@ inavbar = dbc.Nav(
         )
         for page in dash.page_registry.values()
     ], pills=True,
-    className="ms-4 gap-2"
+    className="ms-md-4 gap-md-2"
 )
 
 app.layout = dbc.Container([
@@ -49,7 +53,7 @@ app.layout = dbc.Container([
         dbc.Col([inavbar], className="d-flex justify-content-start"),
         dbc.Col([theme_change], className="d-flex justify-content-end")
         # inavbar, theme_change
-    ], className="inavbar bg-opacity-25 bg-secondary mt-4 mb-4"),
+    ], className="d-flex inavbar bg-opacity-25 bg-secondary mt-4 mb-4"),
 
     # html.Hr(),
 

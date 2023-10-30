@@ -19,6 +19,18 @@ elink = '<i class="fa fa-arrow-up-right-from-square text-primary"></i>'
 # pattern for transcript matching
 tx_pattern = r'\bAT\w*\.[0-9]'
 
+# Class definition for headers
+summary_cls = 'border-bottom border-3 border-secondary pb-2 mb-4'
+icon_hide = "fas fa-angle-up me-4 align-self-center icon"
+icon_show = "fas fa-angle-down me-4 align-self-center icon"
+hdr_hide = 'd-flex bg-opacity-25 bg-primary'
+hdr_show = 'd-flex bg-opacity-10 bg-primary'
+hdr_div = 'd-flex bg-opacity-25 bg-primary'
+
+# Class definition for datasets
+dataSetOn = "text-dark bg-primary bg-opacity-50"
+dataSetOff = "text-light bg-secondary bg-opacity-25 text-secondary"
+
 # Dictionary for renaming columns
 new_columns = {
     "category_1": "Classification 1",
@@ -137,7 +149,7 @@ def import_vars(base):
 def import_data(base, ivars, py_settings_str):
     base = ivars['ibase']
     py_settings=int(py_settings_str)
-    
+
     # Import miRNA alignment dataframe
     miRNA_df = pd.read_csv(
         f"./data/miRNA_alignment_global_mirmap_{base}.tsv",
@@ -166,14 +178,8 @@ def import_data(base, ivars, py_settings_str):
     return {"pydeg_df": pydeg_df, "miRNA_df": miRNA_df}
 
 
-def toggle_show(n, is_open):
-    # Class definition for headers
-    icon_hide = "fas fa-angle-up me-4 align-self-center icon"
-    icon_show = "fas fa-angle-down me-4 align-self-center icon"
-    hdr_hide = 'd-flex bg-opacity-25 bg-primary'
-    hdr_show = 'd-flex bg-opacity-10 bg-primary'
-    # hdr_div = 'd-flex bg-opacity-25 bg-primary'
-    if n:
+def toggle_show(n_clicks, is_open):
+    if n_clicks:
         hide_show = not is_open
         if hide_show:
             btn = icon_hide
@@ -185,7 +191,7 @@ def toggle_show(n, is_open):
         hide_show = is_open
         btn = icon_hide
 
-    return hide_show, btn, hdr
+    return [hide_show, btn, hdr]
 
 
 def calcFontSize(width):
@@ -210,14 +216,16 @@ def draw_miRNAplot(mirmap_link, globalAln_link):
             [html.P('Peak alignment (mirmap)'),
              html.Img(src=mirmap_link,
                       style={'width': '100%',
-                             'height': 'auto'})],
+                             'height': 'auto'}
+                      )],
             className='miRNA_alignment')
     elif isinstance(globalAln_link, str):
         miRNA_alignment_plot = html.Div(
             [html.P('Peak region alignment (global)'),
              html.Img(src=globalAln_link,
                       style={'width': '100%',
-                             'height': 'auto'})],
+                             'height': 'auto'}
+                      )],
             className='miRNA_alignment')
     return miRNA_alignment_plot
 

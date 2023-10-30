@@ -95,6 +95,7 @@ svg.icon{
     font-size: 0.750rem;   
 }
 
+.form-control,
 .dropdownFont {
     font-size: 0.625rem;
 }
@@ -193,6 +194,7 @@ svg.icon{
 
 .py_results{
     display: flex;
+    gap: 1em;
     flex-wrap: wrap;
 }
 
@@ -204,18 +206,17 @@ svg.icon{
 @media screen and (min-width: 1400px) {
     .py_results{
 	display: flex;
+	gap: 1em;
     }
 
     .py_table{
 	flex-basis: 40%;
 	flex-shrink: 1;
-	margin-right: 1em;
     }
     
     .plots {
 	flex-basis: 40%;
 	flex-grow: 1;
-	margin-left: 1em;
     }
 
     figure img {
@@ -291,9 +292,13 @@ svg.icon{
 }
 
 code {
-    color: var(--bg-subtitle);
+    color: var(--bs-info);
 }
 
 .hl {
-    background-color: var(--bs-light);
+    background-color: var(--bs-secondary);
+}
+
+.font-mrna-plot {
+    color: var(--bs-primary);
 }
