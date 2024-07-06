@@ -40,18 +40,13 @@ python app.py
 ```
 
 
-# Live version
-
-<https://sslbio.pythonanywhere.com/>
-
-
 # Further details
 
 Details and code for the analysis of degradation fragments are provided on another [repository](https://github.com/ssl-bio/Degradome-analysis)
 
 
 # References
-<div class="csl-bib-body">
+
   <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Gaglia, Marta Maria, Chris H. Rycroft, and Britt A. Glaunsinger. 2015. “Transcriptome-Wide Cleavage Site Mapping on Cellular mRNAs Reveals Features Underlying Sequence-Specific Cleavage by the Viral Ribonuclease SOX.” Edited by Pinghui Feng. <i>Plos Pathogens</i> 11 (12): e1005305. doi:<a href="https://doi.org/10.1371/journal.ppat.1005305">10.1371/journal.ppat.1005305</a>.</div>
   <div class="csl-entry"><a id="citeproc_bib_item_2"></a>Oliver, Cecilia, Maria Luz Annacondia, Zhenxing Wang, Pauline E. Jullien, R. Keith Slotkin, Claudia Köhler, and German Martinez. 2022. “The miRNome Function Transitions from Regulating Developmental Genes to Transposable Elements during Pollen Maturation.” <i>The Plant Cell</i> 34 (2): 784–801. doi:<a href="https://doi.org/10.1093/plcell/koab280">10.1093/plcell/koab280</a>.</div>
   <div class="csl-entry"><a id="citeproc_bib_item_3"></a>Zhang, He, Zhonglong Guo, Yan Zhuang, Yuanzhen Suo, Jianmei Du, Zhaoxu Gao, Jiawei Pan, et al. 2021. “MicroRNA775 Regulates Intrinsic Leaf Size and Reduces Cell Wall Pectin Levels by Targeting a Galactosyltransferase Gene in Arabidopsis.” <i>The Plant Cell</i> 33 (3): 581–602. doi:<a href="https://doi.org/10.1093/plcell/koaa049">10.1093/plcell/koaa049</a>.</div>
