@@ -6,14 +6,6 @@ from dash_bootstrap_templates import ThemeChangerAIO
 doc_title = 'Dashboard for the analysis of mRNA degradation fragments'
 
 e_stylesheets = [dbc.themes.JOURNAL, dbc.icons.FONT_AWESOME]
-theme_change = ThemeChangerAIO(aio_id="theme",
-                               radio_props={
-                                   "className":
-                                   "description_h4",
-                                   'value': dbc.themes.JOURNAL},
-                               button_props={
-                                   "className":
-                                   "rounded-pill me-4 description_h3"})
 
 app = dash.Dash(__name__, use_pages=True,
                 assets_ignore='.#custom.css',
@@ -23,6 +15,16 @@ app = dash.Dash(__name__, use_pages=True,
                      maximum-scale=1"}
                 ],
                 external_stylesheets=e_stylesheets)
+
+theme_change = ThemeChangerAIO(aio_id="theme",
+                               radio_props={
+                                   "className":
+                                   "description_h4",
+                                   'value': dbc.themes.JOURNAL},
+                               button_props={
+                                   "className":
+                                   "rounded-pill me-4 description_h3"})
+
 app.config.suppress_callback_exceptions = True
 # load_figure_template('journal')
 
