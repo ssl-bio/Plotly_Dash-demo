@@ -1,7 +1,7 @@
 import re
 import dash
 from dash import dcc, html, Input, Output, callback, \
-    dash_table, no_update, State, clientside_callback
+    dash_table, no_update, State, MATCH, clientside_callback
 import dash_bootstrap_components as dbc
 from dash_bootstrap_templates import ThemeChangerAIO, \
     template_from_url
@@ -131,13 +131,13 @@ layout = html.Main([
                 html.H2('Test case description',
                         className='flex-fill'),
                 html.I(className=bib.icon_hide,
-                       id="description_btn",
+                       id={"type": "btn", "section": "description"},
                        n_clicks=0)
-            ], id="description_header",
+            ], id={"type": "header", "section": "description"},
                      className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
-                id="description_html",
+                id={"type": "description_html", "section": "description"},
                 className="mt-4",
             ),
         ], color='secondary')
@@ -149,13 +149,13 @@ layout = html.Main([
                 html.H2('PyDegradome settings',
                         className='flex-fill'),
                 html.I(className=bib.icon_hide,
-                       id="settings_btn",
+                       id={"type": "btn", "section": "settings"},
                        n_clicks=0)
-            ], id="settings_header",
+           ], id={"type": "header", "section": "settings"},
                      className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
-                id="settings_description_html",
+                id={"type": "description_html", "section": "settings"},
                 className="mt-4",
                 children=[
                     html.Div([
@@ -185,13 +185,13 @@ layout = html.Main([
                 html.H2('Summary of peak classification',
                         className='flex-fill'),
                 html.I(className=bib.icon_hide,
-                       id="summary_btn",
+                       id={"type": "btn", "section": "summary"},
                        n_clicks=0)
-            ], id="summary_header",
+            ], id={"type": "header", "section": "summary"},
                      className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
-                id="summary_description_html",
+                id={"type": "description_html", "section":"summary"},
                 className="mt-4",
                 children=[
                     html.Div(
@@ -267,13 +267,13 @@ layout = html.Main([
                 html.H3('List of candidates',
                         className='flex-fill'),
                 html.I(className=bib.icon_hide,
-                       id="candidates_btn",
+                       id={"type": "btn", "section": "candidates"},
                        n_clicks=0)
-            ], id="candidates_header",
+            ], id={"type": "header", "section": "candidates"},
                      className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
-                id="candidates_description_html",
+                id={"type": "description_html", "section": "candidates"},
                 className="mt-4",
                 children=[
                     html.Div(
@@ -407,13 +407,13 @@ layout = html.Main([
                 html.H2('Related literature for the selected transcripts',
                         className='flex-fill'),
                 html.I(className=bib.icon_hide,
-                       id="search_refs_btn",
+                       id={"type": "btn", "section": "refs"},
                        n_clicks=0)
-            ], id="search_refs_header",
+            ], id={"type": "header", "section": "refs"},
                      className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
-                id="search_refs_description_html",
+                id={"type": "description_html", "section": "refs"},
                 className="mt-4",
                 children=[
                     notes_btn,
@@ -595,13 +595,13 @@ layout = html.Main([
                 html.H2('References',
                         className='flex-fill'),
                 html.I(className=bib.icon_hide,
-                       id="references_btn",
+                       id={"type": "btn", "section": "references"},
                        n_clicks=0)
-            ], id="references_header",
+            ], id={"type": "header", "section": "references"},
                      className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
-                id="references_description_html",
+                id={"type":"description_html", "section": "references"},
                 className="mt-4",
                 children=[
                     html.Div(
@@ -629,79 +629,11 @@ clientside_callback(
 
 # START Callbacks for header display
 @callback(
-    [Output("description_html", "is_open"),
-     Output("description_btn", "className"),
-     Output("description_header", "className")],
-    [Input("description_btn", "n_clicks")],
-    [State("description_html", "is_open")],
-    prevent_initial_call=True
-)
-def toggle_collapse_description(n, is_open):
-    toggle_section = bib.toggle_show(n, is_open)
-    hide_show = toggle_section[0]
-    btn = toggle_section[1]
-    hdr = toggle_section[2]
-
-    return hide_show, btn, hdr
-
-
-@callback(
-    [Output("settings_description_html", "is_open"),
-     Output("settings_btn", "className"),
-     Output("settings_header", "className")],
-    [Input("settings_btn", "n_clicks")],
-    [State("settings_description_html", "is_open")],
-    prevent_initial_call=True
-)
-def toggle_collapse_settings(n, is_open):
-    toggle_section = bib.toggle_show(n, is_open)
-    hide_show = toggle_section[0]
-    btn = toggle_section[1]
-    hdr = toggle_section[2]
-
-    return hide_show, btn, hdr
-
-
-@callback(
-    [Output("summary_description_html", "is_open"),
-     Output("summary_btn", "className"),
-     Output("summary_header", "className")],
-    [Input("summary_btn", "n_clicks")],
-    [State("summary_description_html", "is_open")],
-    prevent_initial_call=True
-)
-def toggle_collapse_summary(n, is_open):
-    toggle_section = bib.toggle_show(n, is_open)
-    hide_show = toggle_section[0]
-    btn = toggle_section[1]
-    hdr = toggle_section[2]
-
-    return hide_show, btn, hdr
-
-
-@callback(
-    [Output("candidates_description_html", "is_open"),
-     Output("candidates_btn", "className"),
-     Output("candidates_header", "className")],
-    [Input("candidates_btn", "n_clicks")],
-    [State("candidates_description_html", "is_open")],
-    prevent_initial_call=True
-)
-def toggle_collapse_candidates(n, is_open):
-    toggle_section = bib.toggle_show(n, is_open)
-    hide_show = toggle_section[0]
-    btn = toggle_section[1]
-    hdr = toggle_section[2]
-
-    return hide_show, btn, hdr
-
-
-@callback(
-    [Output("search_refs_description_html", "is_open"),
-     Output("search_refs_btn", "className"),
-     Output("search_refs_header", "className")],
-    [Input("search_refs_btn", "n_clicks")],
-    [State("search_refs_description_html", "is_open")],
+    [Output({"type": "description_html", "section": MATCH}, "is_open"),
+     Output({"type": "btn", "section": MATCH}, "className"),
+     Output({"type": "header", "section": MATCH}, "className")],
+    [Input({"type": "btn", "section": MATCH}, "n_clicks")],
+    [State({"type": "description_html", "section": MATCH}, "is_open")],
     prevent_initial_call=True
 )
 def toggle_collapse_references(n, is_open):
@@ -1017,7 +949,7 @@ def update_dropdown_options(pydeg_data, class_1,
 
 
 @callback(
-    Output("description_html", "children"),
+    Output({"type": "description_html", "section": "description"}, "children"),
     Input("ivars", "data")
 )
 def dataSet_description(ivars):

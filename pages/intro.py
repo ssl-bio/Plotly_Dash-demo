@@ -1,5 +1,5 @@
 import dash
-from dash import html, Input, Output, callback, State
+from dash import html, Input, Output, callback, State, MATCH
 # import plotly.express as px
 import dash_bootstrap_components as dbc
 # import json
@@ -33,13 +33,13 @@ This Dash app summarizes the analysis of mRNA degradation fragments using a thir
                 html.H2('PyDegradome description',
                         className='flex-fill'),
                 html.I(className=bib.icon_hide,
-                       id="pydeg_btn",
+                       id={"type": "btn_i", "section": "description"},
                        n_clicks=0)
-            ], id="pydeg_header",
+            ], id={"type": "header_i", "section": "description"},
                      className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
-                id="pydeg_description_html",
+                id={"type":"description_i_html", "section": "description"},
                 className="mt-4",
                 children=DangerouslySetInnerHTML('''
 <p>
@@ -84,13 +84,13 @@ Significant peaks are reported in a text file (see below); genomic coordinates f
                 html.H2('Classification post PyDegradome',
                         className='flex-fill'),
                 html.I(className=bib.icon_hide,
-                       id="classification_btn",
+                       id={"type": "btn_i", "section": "classification"},
                        n_clicks=0)
-            ], id="classification_header",
+            ], id={"type": "header_i", "section": "classification"},
                      className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
-                id="classification_description_html",
+                id={"type": "description_i_html", "section": "classification"},
                 className="mt-4",
                 children=DangerouslySetInnerHTML("""
 <p>
@@ -157,7 +157,7 @@ The two classification steps along with the annotation, summary and other steps 
 <ul class="org-ul">
 <li><a href="https://github.com/ssl-bio/Degradome-analysis">Degradome analysis</a></li>
 <li><a href="https://github.com/ssl-bio/R_postpydeg">R package</a></li>
-<li><a href="https://github.com/ssl-bio/R_postpydeg">Dash app</a></li>
+<li><a href="https://github.com/ssl-bio/Plotly_Dash-demo/">Dash app</a></li>
 </ul>
                      """)),
         ], color='secondary')
@@ -169,13 +169,13 @@ The two classification steps along with the annotation, summary and other steps 
                 html.H2('Alignment of sequences around peaks with known miRNA',
                         className='flex-fill'),
                 html.I(className=bib.icon_hide,
-                       id="alignment_btn",
+                       id={"type": "btn_i", "section": "alignment"},
                        n_clicks=0)
-            ], id="alignment_header",
+            ], id={"type": "header_i", "section": "alignment"},
                      className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
-                id="alignment_description_html",
+                id={"type": "description_i_html", "section": "alignment"},
                 className="mt-4",
                 children=DangerouslySetInnerHTML("""
 <p>
@@ -199,13 +199,13 @@ Note that due to storage limitation the alignment was conducted on sequences fro
                 html.H2('Search for related literature',
                         className='flex-fill'),
                 html.I(className=bib.icon_hide,
-                       id="search_btn",
+                       id={"type": "btn_i", "section": "search"},
                        n_clicks=0)
-            ], id="search_header",
+            ], id={"type": "header_i", "section": "search"},
                      className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
-                id="search_description_html",
+                id={"type": "description_i_html", "section": "search"},
                 className="mt-4",
                 children=DangerouslySetInnerHTML("""
 <p>
@@ -231,13 +231,13 @@ The search is carried using <code>biopython</code>'s <a href="https://biopython.
                 html.H2('References',
                         className='flex-fill'),
                 html.I(className=bib.icon_hide,
-                       id="references_btn",
+                       id={"type": "btn_i", "section": "references"},
                        n_clicks=0)
-            ], id="references_header",
+            ], id={"type": "header_i", "section": "references"},
                      className=bib.hdr_div),
             dbc.Collapse(
                 is_open=True,
-                id="references_description_html",
+                id={"type": "description_i_html", "section": "references"},
                 className="mt-4",
                 children=[
                     html.Div(
@@ -255,82 +255,14 @@ The search is carried using <code>biopython</code>'s <a href="https://biopython.
 
 # [F] Callback functions
 @callback(
-    [Output("pydeg_description_html", "is_open"),
-     Output("pydeg_btn", "className"),
-     Output("pydeg_header", "className")],
-    [Input("pydeg_btn", "n_clicks")],
-    [State("pydeg_description_html", "is_open")],
+    [Output({"type": "description_i_html", "section": MATCH}, "is_open"),
+     Output({"type": "btn_i", "section": MATCH}, "className"),
+     Output({"type": "header_i", "section": MATCH}, "className")],
+    [Input({"type": "btn_i", "section": MATCH}, "n_clicks")],
+    [State({"type": "description_i_html", "section": MATCH}, "is_open")],
     prevent_initial_call=True
 )
-def toggle_collapse_description(n, is_open):
-    toggle_section = bib.toggle_show(n, is_open)
-    hide_show = toggle_section[0]
-    btn = toggle_section[1]
-    hdr = toggle_section[2]
-
-    return hide_show, btn, hdr
-
-
-@callback(
-    [Output("alignment_description_html", "is_open"),
-     Output("alignment_btn", "className"),
-     Output("alignment_header", "className")],
-    [Input("alignment_btn", "n_clicks")],
-    [State("alignment_description_html", "is_open")],
-    prevent_initial_call=True
-)
-def toggle_collapse_alignment(n, is_open):
-    toggle_section = bib.toggle_show(n, is_open)
-    hide_show = toggle_section[0]
-    btn = toggle_section[1]
-    hdr = toggle_section[2]
-
-    return hide_show, btn, hdr
-
-
-@callback(
-    [Output("classification_description_html", "is_open"),
-     Output("classification_btn", "className"),
-     Output("classification_header", "className")],
-    [Input("classification_btn", "n_clicks")],
-    [State("classification_description_html", "is_open")],
-    prevent_initial_call=True
-)
-def toggle_collapse_classification(n, is_open):
-    toggle_section = bib.toggle_show(n, is_open)
-    hide_show = toggle_section[0]
-    btn = toggle_section[1]
-    hdr = toggle_section[2]
-
-    return hide_show, btn, hdr
-
-
-@callback(
-    [Output("search_description_html", "is_open"),
-     Output("search_btn", "className"),
-     Output("search_header", "className")],
-    [Input("search_btn", "n_clicks")],
-    [State("search_description_html", "is_open")],
-    prevent_initial_call=True
-)
-def toggle_collapse_search(n, is_open):
-    toggle_section = bib.toggle_show(n, is_open)
-    hide_show = toggle_section[0]
-    btn = toggle_section[1]
-    hdr = toggle_section[2]
-
-    return hide_show, btn, hdr
-
-
-@callback(
-    [Output("references_description_html", "is_open"),
-     Output("references_btn", "className"),
-     Output("references_header", "className")],
-    [Input("references_btn", "n_clicks")],
-    [State("references_description_html", "is_open")],
-    prevent_initial_call=True
-)
-def toggle_collapse_references(n, is_open):
+def toggle_collapse(n, is_open):
     toggle_section = bib.toggle_show(n, is_open)
     hide_show = toggle_section[0]
     btn = toggle_section[1]
